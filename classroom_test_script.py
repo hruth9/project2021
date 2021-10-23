@@ -77,13 +77,13 @@ print(" ")
 print("#Should succeed:")
 run_cmd(["./create_table.sh", "testDB", "testTable", "c1,c2,c3"])
 
-if os.path.isfile("./testTable"):
+if os.path.isfile("./testDB/testTable"):
     print("#Created the file './testTable' correctly")
 else:
     print("#Did not create the file")
     exit(1)
 
-if not check_if_string_in_file("c1,c2,c3", "./testDB/testTable"):
+if not check_if_string_in_file("./testDB/testTable", "c1,c2,c3"):
     print("#Columns header not added to testTable correctly")
     exit(1)
 
@@ -99,38 +99,38 @@ print("#TESTING: insert.sh")
 
 print(" ")
 print("#Should fail because too many params:")
-if run_cmd("./insert.sh", "testDB", "testTable", "v1,v2,v3", "wrong") == 0:
+if run_cmd(["./insert.sh", "testDB", "testTable", "v1,v2,v3", "wrong"]) == 0:
     print("#insert.sh should have failed because too many")
     exit(1)
 
 print(" ")
 print("#Should fail because too few params:")
-if run_cmd("./insert.sh", "testDB", "testTable") == 0:
+if run_cmd(["./insert.sh", "testDB", "testTable"]) == 0:
     print("#insert.sh should have failed because too few params")
     exit(1)
 
 print(" ")
 print("#Should fail because db doesnt exist:")
-if run_cmd("./insert.sh", "testDB1", "testTable", "v1,v2,v3") == 0:
+if run_cmd(["./insert.sh", "testDB1", "testTable", "v1,v2,v3"]) == 0:
     print("#insert.sh should have failed because db doesnt exist")
     exit(1)
 
 print(" ")
 print("#Should fail because table doesnt exist:")
-if run_cmd("./insert.sh", "testDB", "testTable1", "v1,v2,v3") == 0:
+if run_cmd(["./insert.sh", "testDB", "testTable1", "v1,v2,v3"]) == 0:
     print("#insert.sh should have failed because table doesnt exist")
     exit(1)
 
 print(" ")
 print("#Should fail because wrong number of columns:")
-if run_cmd("./insert.sh", "testDB", "testTable", "v1,v2,v3,v4") == 0:
+if run_cmd(["./insert.sh", "testDB", "testTable", "v1,v2,v3,v4"]) == 0:
     print("#insert.sh should have failed because wrong number of columns provided")
     exit(1)
 
 print(" ")
 print("#Should succeed:")
-run_cmd("./insert.sh", "testDB", "testTable", "v1,v2,v3")
-if not check_if_string_in_file("v1,v2,v3", "./testDB/testTable"):
+run_cmd(["./insert.sh", "testDB", "testTable", "v1,v2,v3"])
+if not check_if_string_in_file("./testDB/testTable", "v1,v2,v3"):
     print("#Did not add the row to the table")
     exit(1)
 
@@ -140,34 +140,43 @@ print("#TESTING: select.sh")
 
 print(" ")
 print("#Should fail because too many params:")
-if run_cmd("./select.sh", "testDB", "testTable", "2", "wrong") == 0:
+if run_cmd(["./select.sh", "testDB", "testTable", "2", "wrong"]) == 0:
     print("#select.sh should have failed because too many params")
     exit(1)
 
 print(" ")
 print("#Should fail because too few params:")
-if run_cmd("./select.sh", "testDB") == 0:
+if run_cmd(["./select.sh", "testDB"]) == 0:
     print("#select.sh should have failed because too few params")
     exit(1)
 
 print(" ")
 print("#Should fail because db doesnt exist:")
-if run_cmd("./select.sh", "testDB1", "testTable", "1,2") == 0:
+if run_cmd(["./select.sh", "testDB1", "testTable", "1,2"]) == 0:
     print("#select.sh should have failed because db doesnt exist")
     exit(1)
 
 print(" ")
 print("#Should fail because table doesn't exist:")
-if run_cmd("./select.sh", "testDB", "testTable1", "1,2") == 0:
+if run_cmd(["./select.sh", "testDB", "testTable1", "1,2"]) == 0:
     print("#select.sh should have failed because table doesn't exist")
     exit(1)
 
 print(" ")
 print("#Should fail because column doesn't exist:")
-if run_cmd("./select.sh", "testDB", "testTable", "4") != 0:
+if run_cmd(["./select.sh", "testDB", "testTable", "4"]) == 0:
+    print("select.sh should have failed because column doesn't exist")
+    exit(1)
+
+print(" ")
+print("#Should fail because column doesn't exist:")
+if run_cmd(["./select.sh", "testDB", "testTable", "0"]) == 0:
     print("select.sh should have failed because column doesn't exist")
     exit(1)
 
 print(" ")
 print("#Should succeed:")
-run_cmd("./select.sh", "testDB", "testTable", "1,2")
+run_cmd(["./select.sh", "testDB", "testTable", "1,2"])
+
+print(" ")
+print("Ta-da!")
